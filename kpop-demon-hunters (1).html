@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🎤 K-POP DEMON HUNTERS 👹</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bangers&family=Righteous&family=Bungee&display=swap');
+        
+        :root {
+            --neon-cyan: #00ffff;
+            --neon-magenta: #ff00ff;
+            --neon-yellow: #ffff00;
+            --neon-green: #00ff00;
+            --neon-orange: #ff6600;
+            --neon-pink: #ff1493;
+            --neon-purple: #9d00ff;
+            --neon-blue: #0066ff;
+            --neon-red: #ff0000;
+            --dark-bg: #0a0a0a;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Righteous', cursive;
+            background: var(--dark-bg);
+            color: var(--neon-cyan);
+            overflow: hidden;
+            cursor: none;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 30% 70%, rgba(255, 0, 255, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 70% 30%, rgba(0, 255, 255, 0.2) 0%, transparent 50%);
+            pointer-events: none;
+            animation: bgPulse 8s ease-in-out infinite;
+        }
+        
+        @keyframes bgPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        
+        #gameContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        #title {
+            font-family: 'Bangers', cursive;
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            text-align: center;
+            margin-bottom: 20px;
+            background: linear-gradient(120deg, 
+                var(--neon-pink), var(--neon-purple), var(--neon-cyan), 
+                var(--neon-yellow), var(--neon-pink));
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: rainbowFlow 3s ease infinite;
+            letter-spacing: 0.1em;
+            text-shadow: 0 0 40px rgba(255, 0, 255, 0.5);
+        }
+        
+        @keyframes rainbowFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        #characterSelect {
+            background: rgba(26, 26, 46, 0.95);
+            border: 5px solid var(--neon-magenta);
+            border-radius: 30px;
+            padding: 40px;
+            box-shadow: 0 0 80px rgba(255, 0, 255, 0.6);
+            animation: borderPulse 2s ease-in-out infinite;
+            max-width: 900px;
+        }
+        
+        @keyframes borderPulse {
+            0%, 100% { border-color: var(--neon-magenta); }
+            50% { border-color: var(--neon-cyan); }
+        }
+        
+        #characterSelect h2 {
+            font-family: 'Bungee', cursive;
+            font-size: clamp(1.8rem, 5vw, 3rem);
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--neon-yellow);
+            text-shadow: 0 0 20px var(--neon-yellow);
+        }
+        
+        .characters {
+            display: flex;
+            gap: 25px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .character-card {
+            background: rgba(0, 0, 0, 0.7);
+            border: 4px solid;
+            border-radius: 20px;
+            padding: 20px;
+            width: 240px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .character-card:hover {
+            transform: scale(1.1) translateY(-10px);
+            box-shadow: 0 0 50px;
+        }
+        
+        .character-card.rumi {
+            border-color: var(--neon-cyan);
+        }
+        
+        .character-card.rumi:hover {
+            box-shadow: 0 0 50px var(--neon-cyan);
+        }
+        
+        .character-card.mira {
+            border-color: var(--neon-pink);
+        }
+        
+        .character-card.mira:hover {
+            box-shadow: 0 0 50px var(--neon-pink);
+        }
+        
+        .character-card.zoey {
+            border-color: var(--neon-purple);
+        }
+        
+        .character-card.zoey:hover {
+            box-shadow: 0 0 50px var(--neon-purple);
+        }
+        
+        .character-icon {
+            font-size: 80px;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 0 20px currentColor);
+        }
+        
+        .character-name {
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px currentColor;
+        }
+        
+        .character-power {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+        
+        .character-stats {
+            font-size: 0.85rem;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        #canvasWrapper {
+            position: relative;
+            box-shadow: 
+                0 0 60px rgba(255, 0, 255, 0.5),
+                0 0 120px rgba(0, 255, 255, 0.4);
+            border: 5px solid var(--neon-magenta);
+            border-radius: 25px;
+            overflow: hidden;
+            background: rgba(10, 10, 26, 0.95);
+            animation: gameGlow 3s ease-in-out infinite;
+            display: none;
+        }
+        
+        @keyframes gameGlow {
+            0%, 100% { border-color: var(--neon-magenta); }
+            33% { border-color: var(--neon-cyan); }
+            66% { border-color: var(--neon-yellow); }
+        }
+        
+        #gameCanvas {
+            display: block;
+            touch-action: none;
+        }
+        
+        #gameInfo {
+            display: none;
+            justify-content: center;
+            gap: 15px;
+            width: 100%;
+            max-width: 1000px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .info-box {
+            flex: 1;
+            min-width: 100px;
+            text-align: center;
+            padding: 12px 18px;
+            background: rgba(26, 26, 46, 0.9);
+            border-radius: 20px;
+            border: 3px solid;
+            backdrop-filter: blur(15px);
+            font-size: clamp(1rem, 2.8vw, 1.5rem);
+            font-weight: 700;
+        }
+        
+        #levelBox {
+            border-color: var(--neon-yellow);
+            color: var(--neon-yellow);
+            text-shadow: 0 0 15px var(--neon-yellow);
+        }
+        
+        #scoreBox {
+            border-color: var(--neon-cyan);
+            color: var(--neon-cyan);
+            text-shadow: 0 0 15px var(--neon-cyan);
+        }
+        
+        #friendsBox {
+            border-color: var(--neon-green);
+            color: var(--neon-green);
+            text-shadow: 0 0 15px var(--neon-green);
+        }
+        
+        #healthBox {
+            border-color: var(--neon-pink);
+            color: var(--neon-pink);
+            text-shadow: 0 0 15px var(--neon-pink);
+        }
+        
+        .info-box.pulse {
+            animation: infoPulse 0.4s ease;
+        }
+        
+        @keyframes infoPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); filter: brightness(1.8); }
+        }
+        
+        .label {
+            font-size: 0.55em;
+            opacity: 0.85;
+            display: block;
+            margin-bottom: 3px;
+        }
+        
+        #customCursor {
+            position: fixed;
+            width: 35px;
+            height: 35px;
+            border: 3px solid var(--neon-magenta);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 25px var(--neon-magenta);
+            animation: cursorPulse 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes cursorPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.2); }
+        }
+        
+        #customCursor::after {
+            content: '⭐';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 18px;
+        }
+        
+        #levelComplete, #gameOver {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: rgba(0, 0, 0, 0.95);
+            padding: 40px 60px;
+            border-radius: 30px;
+            border: 5px solid var(--neon-pink);
+            text-align: center;
+            z-index: 1000;
+            box-shadow: 0 0 100px rgba(255, 20, 147, 0.8);
+            transition: transform 0.3s ease;
+        }
+        
+        #levelComplete.show, #gameOver.show {
+            transform: translate(-50%, -50%) scale(1);
+        }
+        
+        #levelComplete h2, #gameOver h2 {
+            font-family: 'Bangers', cursive;
+            font-size: clamp(2.5rem, 7vw, 4.5rem);
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, var(--neon-pink), var(--neon-yellow), var(--neon-cyan));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        #levelComplete p, #gameOver p {
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            margin: 12px 0;
+            color: var(--neon-cyan);
+        }
+        
+        .game-button {
+            margin-top: 25px;
+            padding: 18px 45px;
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            font-family: 'Righteous', cursive;
+            background: linear-gradient(45deg, var(--neon-pink), var(--neon-purple));
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            text-transform: uppercase;
+            box-shadow: 0 0 40px rgba(255, 20, 147, 0.7);
+            transition: all 0.3s ease;
+        }
+        
+        .game-button:hover {
+            transform: scale(1.15);
+            box-shadow: 0 0 60px rgba(255, 20, 147, 1);
+        }
+        
+        @media (max-width: 768px) {
+            .characters {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="customCursor"></div>
+    
+    <div id="gameContainer">
+        <h1 id="title">🎤 K-POP DEMON HUNTERS 👹</h1>
+        
+        <div id="characterSelect">
+            <h2>🌟 ELIGE TU CAZADORA 🌟</h2>
+            <div class="characters">
+                <div class="character-card rumi" onclick="selectCharacter('rumi')">
+                    <div class="character-icon">💎</div>
+                    <div class="character-name" style="color: var(--neon-cyan)">RUMI</div>
+                    <div class="character-power" style="color: var(--neon-cyan)">
+                        ⚡ PODER: Rayo de Hielo<br>
+                        Congela a los demonios
+                    </div>
+                    <div class="character-stats" style="color: var(--neon-cyan)">
+                        Velocidad: ⭐⭐⭐⭐⭐<br>
+                        Poder: ⭐⭐⭐
+                    </div>
+                </div>
+                
+                <div class="character-card mira" onclick="selectCharacter('mira')">
+                    <div class="character-icon">🔥</div>
+                    <div class="character-name" style="color: var(--neon-pink)">MIRA</div>
+                    <div class="character-power" style="color: var(--neon-pink)">
+                        🔥 PODER: Llamarada Rosa<br>
+                        Ataque de fuego masivo
+                    </div>
+                    <div class="character-stats" style="color: var(--neon-pink)">
+                        Velocidad: ⭐⭐⭐<br>
+                        Poder: ⭐⭐⭐⭐⭐
+                    </div>
+                </div>
+                
+                <div class="character-card zoey" onclick="selectCharacter('zoey')">
+                    <div class="character-icon">✨</div>
+                    <div class="character-name" style="color: var(--neon-purple)">ZOEY</div>
+                    <div class="character-power" style="color: var(--neon-purple)">
+                        ✨ PODER: Estrella Sanadora<br>
+                        Recupera vida + daño
+                    </div>
+                    <div class="character-stats" style="color: var(--neon-purple)">
+                        Velocidad: ⭐⭐⭐⭐<br>
+                        Poder: ⭐⭐⭐⭐
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="canvasWrapper">
+            <canvas id="gameCanvas" width="900" height="600"></canvas>
+        </div>
+        
+        <div id="gameInfo">
+            <div class="info-box" id="levelBox">
+                <span class="label">NIVEL</span>
+                <span id="level">1</span>
+            </div>
+            <div class="info-box" id="scoreBox">
+                <span class="label">PUNTOS</span>
+                <span id="score">0</span>
+            </div>
+            <div class="info-box" id="friendsBox">
+                <span class="label">AMIGOS</span>
+                <span id="friends">0/3</span>
+            </div>
+            <div class="info-box" id="healthBox">
+                <span class="label">VIDA</span>
+                <span id="health">❤️❤️❤️</span>
+            </div>
+        </div>
+    </div>
+    
+    <div id="levelComplete">
+        <h2>🎉 ¡NIVEL COMPLETADO! 🎉</h2>
+        <p id="levelMessage">¡Amigos rescatados!</p>
+        <p>Puntos: <span id="levelScore">0</span></p>
+        <button class="game-button" onclick="nextLevel()">➡️ SIGUIENTE NIVEL</button>
+    </div>
+    
+    <div id="gameOver">
+        <h2 id="gameOverTitle">🎮 GAME OVER 🎮</h2>
+        <p id="gameOverMessage">¡Inténtalo de nuevo!</p>
+        <p>Puntuación final: <span id="finalScore">0</span></p>
+        <p>Nivel alcanzado: <span id="finalLevel">1</span></p>
+        <button class="game-button" onclick="restartGame()">🔄 REINICIAR</button>
+    </div>
+
+    <script>
+        const cursor = document.getElementById('customCursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        function resizeCanvas() {
+            const maxWidth = Math.min(900, window.innerWidth - 40);
+            const maxHeight = Math.min(600, window.innerHeight - 300);
+            const ratio = 900 / 600;
+            
+            if (maxWidth / maxHeight > ratio) {
+                canvas.style.height = maxHeight + 'px';
+                canvas.style.width = (maxHeight * ratio) + 'px';
+            } else {
+                canvas.style.width = maxWidth + 'px';
+                canvas.style.height = (maxWidth / ratio) + 'px';
+            }
+        }
+        
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        
+        // Characters
+        const characters = {
+            rumi: {
+                name: 'Rumi',
+                color: '#00ffff',
+                icon: '💎',
+                power: '❄️',
+                powerName: 'Rayo de Hielo',
+                speed: 7,
+                damage: 20
+            },
+            mira: {
+                name: 'Mira',
+                color: '#ff1493',
+                icon: '🔥',
+                power: '🔥',
+                powerName: 'Llamarada Rosa',
+                speed: 5,
+                damage: 35
+            },
+            zoey: {
+                name: 'Zoey',
+                color: '#9d00ff',
+                icon: '✨',
+                power: '✨',
+                powerName: 'Estrella Sanadora',
+                speed: 6,
+                damage: 25,
+                healing: 1
+            }
+        };
+        
+        let selectedCharacter = null;
+        let currentLevel = 1;
+        let score = 0;
+        let health = 3;
+        let friendsRescued = 0;
+        let friendsNeeded = 3;
+        let gameRunning = false;
+        
+        const player = {
+            x: 100,
+            y: canvas.height / 2,
+            width: 50,
+            height: 50,
+            dy: 0,
+            speed: 6
+        };
+        
+        const bullets = [];
+        const demons = [];
+        const friends = [];
+        const particles = [];
+        const powerUps = [];
+        
+        let keys = {};
+        let demonSpawnTimer = 0;
+        let friendSpawnTimer = 0;
+        
+        function selectCharacter(char) {
+            selectedCharacter = characters[char];
+            player.speed = selectedCharacter.speed;
+            
+            document.getElementById('characterSelect').style.display = 'none';
+            document.getElementById('canvasWrapper').style.display = 'block';
+            document.getElementById('gameInfo').style.display = 'flex';
+            
+            gameRunning = true;
+            gameLoop();
+        }
+        
+        // Controls
+        document.addEventListener('keydown', (e) => {
+            keys[e.code] = true;
+            if (e.code === 'Space' && gameRunning) {
+                e.preventDefault();
+                shoot();
+            }
+        });
+        
+        document.addEventListener('keyup', (e) => {
+            keys[e.code] = false;
+        });
+        
+        canvas.addEventListener('click', () => {
+            if (gameRunning) shoot();
+        });
+        
+        // Touch controls for mobile - movement and shooting
+        let touchStartX = 0;
+        let touchStartY = 0;
+        
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            if (!gameRunning) return;
+            
+            const touch = e.touches[0];
+            const rect = canvas.getBoundingClientRect();
+            touchStartX = (touch.clientX - rect.left) * (canvas.width / rect.width);
+            touchStartY = (touch.clientY - rect.top) * (canvas.height / rect.height);
+            
+            shoot(); // Dispara al tocar
+        });
+        
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            if (!gameRunning) return;
+            
+            const touch = e.touches[0];
+            const rect = canvas.getBoundingClientRect();
+            const touchX = (touch.clientX - rect.left) * (canvas.width / rect.width);
+            const touchY = (touch.clientY - rect.top) * (canvas.height / rect.height);
+            
+            // Move player based on touch position
+            player.x = touchX - player.width / 2;
+            player.y = touchY - player.height / 2;
+            
+            player.x = Math.max(0, Math.min(canvas.width - player.width, player.x));
+            player.y = Math.max(0, Math.min(canvas.height - player.height, player.y));
+        });
+        
+        function shoot() {
+            bullets.push({
+                x: player.x + player.width,
+                y: player.y + player.height / 2,
+                width: 15,
+                height: 8,
+                speed: 12,
+                color: selectedCharacter.color,
+                icon: selectedCharacter.power
+            });
+        }
+        
+        function spawnDemon() {
+            const types = [
+                { emoji: '👹', health: 2, points: 10, color: '#ff0000' },
+                { emoji: '👺', health: 3, points: 15, color: '#ff6600' },
+                { emoji: '💀', health: 1, points: 5, color: '#ffffff' },
+                { emoji: '🦇', health: 1, points: 8, color: '#9d00ff', speed: 4 }
+            ];
+            
+            const type = types[Math.floor(Math.random() * types.length)];
+            demons.push({
+                x: canvas.width + 50,
+                y: 50 + Math.random() * (canvas.height - 150),
+                width: 50,
+                height: 50,
+                speed: (type.speed || 3) + currentLevel * 0.5,
+                ...type
+            });
+        }
+        
+        function spawnFriend() {
+            const friendTypes = ['👫', '👬', '👭', '🧑', '👨', '👩'];
+            friends.push({
+                x: canvas.width + 50,
+                y: 50 + Math.random() * (canvas.height - 150),
+                width: 45,
+                height: 45,
+                speed: 2,
+                emoji: friendTypes[Math.floor(Math.random() * friendTypes.length)],
+                trapped: true
+            });
+        }
+        
+        function createParticles(x, y, color, count = 20) {
+            for (let i = 0; i < count; i++) {
+                particles.push({
+                    x, y,
+                    dx: (Math.random() - 0.5) * 10,
+                    dy: (Math.random() - 0.5) * 10,
+                    size: 3 + Math.random() * 6,
+                    color,
+                    life: 1
+                });
+            }
+        }
+        
+        function drawPlayer() {
+            ctx.save();
+            ctx.translate(player.x + player.width / 2, player.y + player.height / 2);
+            
+            const char = selectedCharacter;
+            
+            // Shadow
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+            ctx.beginPath();
+            ctx.ellipse(0, 35, 20, 8, 0, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Legs
+            ctx.fillStyle = '#2a2a3e';
+            ctx.shadowBlur = 8;
+            ctx.shadowColor = char.color;
+            ctx.fillRect(-8, 10, 6, 20);
+            ctx.fillRect(2, 10, 6, 20);
+            
+            // Boots
+            ctx.fillStyle = '#1a1a2e';
+            ctx.fillRect(-10, 25, 8, 8);
+            ctx.fillRect(2, 25, 8, 8);
+            
+            // Body/Outfit
+            ctx.fillStyle = char.color;
+            ctx.shadowBlur = 12;
+            ctx.shadowColor = char.color;
+            ctx.beginPath();
+            ctx.moveTo(-12, -5);
+            ctx.lineTo(12, -5);
+            ctx.lineTo(10, 15);
+            ctx.lineTo(-10, 15);
+            ctx.closePath();
+            ctx.fill();
+            
+            // Outfit details (belt/accessories)
+            ctx.strokeStyle = '#ffd700';
+            ctx.lineWidth = 2;
+            ctx.shadowBlur = 8;
+            ctx.shadowColor = '#ffff00';
+            ctx.beginPath();
+            ctx.moveTo(-12, 5);
+            ctx.lineTo(12, 5);
+            ctx.stroke();
+            
+            // Arms
+            ctx.fillStyle = char.color;
+            ctx.globalAlpha = 0.9;
+            ctx.fillRect(-15, -3, 5, 12);
+            ctx.fillRect(10, -3, 5, 12);
+            ctx.globalAlpha = 1;
+            
+            // Neck
+            ctx.fillStyle = '#ffdbac';
+            ctx.fillRect(-3, -8, 6, 5);
+            
+            // Head
+            ctx.fillStyle = '#ffdbac';
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = char.color;
+            ctx.beginPath();
+            ctx.arc(0, -15, 12, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Hair based on character
+            ctx.fillStyle = char.color;
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = char.color;
+            
+            if (char.name === 'Rumi') {
+                // High ponytail
+                ctx.beginPath();
+                ctx.arc(0, -25, 8, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillRect(-8, -27, 16, 8);
+            } else if (char.name === 'Mira') {
+                // Long flowing hair
+                ctx.beginPath();
+                ctx.moveTo(-12, -20);
+                ctx.quadraticCurveTo(-15, -10, -12, 5);
+                ctx.quadraticCurveTo(0, -15, 12, 5);
+                ctx.quadraticCurveTo(15, -10, 12, -20);
+                ctx.closePath();
+                ctx.fill();
+            } else {
+                // Buns
+                ctx.beginPath();
+                ctx.arc(-10, -22, 6, 0, Math.PI * 2);
+                ctx.arc(10, -22, 6, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            
+            // Face details
+            ctx.fillStyle = '#000000';
+            ctx.shadowBlur = 0;
+            // Eyes
+            ctx.beginPath();
+            ctx.arc(-4, -15, 1.5, 0, Math.PI * 2);
+            ctx.arc(4, -15, 1.5, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Mouth
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.arc(0, -12, 3, 0, Math.PI);
+            ctx.stroke();
+            
+            // SWORD - Epic weapon based on image
+            ctx.save();
+            ctx.translate(15, 0);
+            ctx.rotate(-0.3);
+            
+            // Sword handle
+            ctx.fillStyle = '#8b4513';
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = char.color;
+            ctx.fillRect(-2, -8, 4, 16);
+            
+            // Sword guard
+            ctx.fillStyle = '#ffd700';
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = '#ffff00';
+            ctx.fillRect(-8, -2, 16, 4);
+            
+            // Sword blade
+            const bladeGradient = ctx.createLinearGradient(0, -25, 0, -8);
+            bladeGradient.addColorStop(0, char.color);
+            bladeGradient.addColorStop(0.5, '#ffffff');
+            bladeGradient.addColorStop(1, char.color);
+            ctx.fillStyle = bladeGradient;
+            ctx.shadowBlur = 20;
+            ctx.shadowColor = char.color;
+            
+            // Blade shape
+            ctx.beginPath();
+            ctx.moveTo(0, -25);
+            ctx.lineTo(3, -8);
+            ctx.lineTo(-3, -8);
+            ctx.closePath();
+            ctx.fill();
+            
+            // Blade shine
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 1;
+            ctx.globalAlpha = 0.8;
+            ctx.beginPath();
+            ctx.moveTo(-1, -24);
+            ctx.lineTo(-1, -10);
+            ctx.stroke();
+            ctx.globalAlpha = 1;
+            
+            // Sword gem/crystal
+            ctx.fillStyle = char.color;
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = char.color;
+            ctx.beginPath();
+            ctx.arc(0, -1, 3, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.restore();
+            
+            // Power aura around character
+            ctx.strokeStyle = char.color;
+            ctx.lineWidth = 2;
+            ctx.globalAlpha = 0.3;
+            ctx.shadowBlur = 20;
+            ctx.shadowColor = char.color;
+            ctx.beginPath();
+            ctx.arc(0, 0, 30, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.globalAlpha = 1;
+            
+            ctx.restore();
+            ctx.shadowBlur = 0;
+        }
+        
+        function drawBullets() {
+            bullets.forEach(bullet => {
+                ctx.font = '20px Arial';
+                ctx.textAlign = 'center';
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = bullet.color;
+                ctx.fillText(bullet.icon, bullet.x, bullet.y);
+            });
+            ctx.shadowBlur = 0;
+        }
+        
+        function drawDemons() {
+            demons.forEach(demon => {
+                ctx.font = '45px Arial';
+                ctx.textAlign = 'center';
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = demon.color;
+                ctx.fillText(demon.emoji, demon.x + demon.width / 2, demon.y + demon.height / 2 + 15);
+                
+                // Health bar
+                const barWidth = demon.width;
+                const healthPercent = demon.health / 3;
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+                ctx.fillRect(demon.x, demon.y - 10, barWidth, 5);
+                ctx.fillStyle = healthPercent > 0.5 ? '#00ff00' : healthPercent > 0.25 ? '#ffff00' : '#ff0000';
+                ctx.fillRect(demon.x, demon.y - 10, barWidth * healthPercent, 5);
+            });
+            ctx.shadowBlur = 0;
+        }
+        
+        function drawFriends() {
+            friends.forEach(friend => {
+                if (friend.trapped) {
+                    // Cage
+                    ctx.strokeStyle = '#666666';
+                    ctx.lineWidth = 3;
+                    ctx.shadowBlur = 5;
+                    ctx.shadowColor = '#666666';
+                    for (let i = 0; i < 5; i++) {
+                        ctx.beginPath();
+                        ctx.moveTo(friend.x + i * 10, friend.y);
+                        ctx.lineTo(friend.x + i * 10, friend.y + friend.height);
+                        ctx.stroke();
+                    }
+                }
+                
+                ctx.font = '40px Arial';
+                ctx.textAlign = 'center';
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = '#ffff00';
+                ctx.fillText(friend.emoji, friend.x + friend.width / 2, friend.y + friend.height / 2 + 15);
+            });
+            ctx.shadowBlur = 0;
+        }
+        
+        function drawParticles() {
+            particles.forEach(p => {
+                ctx.fillStyle = p.color;
+                ctx.globalAlpha = p.life;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            ctx.globalAlpha = 1;
+        }
+        
+        function checkCollision(a, b) {
+            return a.x < b.x + b.width &&
+                   a.x + a.width > b.x &&
+                   a.y < b.y + b.height &&
+                   a.y + a.height > b.y;
+        }
+        
+        function updateScore(points) {
+            score += points;
+            document.getElementById('score').textContent = score;
+            document.getElementById('scoreBox').classList.add('pulse');
+            setTimeout(() => document.getElementById('scoreBox').classList.remove('pulse'), 400);
+        }
+        
+        function loseHealth() {
+            health--;
+            const hearts = '❤️'.repeat(health);
+            document.getElementById('health').textContent = hearts || '💔';
+            document.getElementById('healthBox').classList.add('pulse');
+            setTimeout(() => document.getElementById('healthBox').classList.remove('pulse'), 400);
+            
+            if (health <= 0) {
+                endGame(false);
+            }
+        }
+        
+        function rescueFriend() {
+            friendsRescued++;
+            document.getElementById('friends').textContent = `${friendsRescued}/${friendsNeeded}`;
+            document.getElementById('friendsBox').classList.add('pulse');
+            setTimeout(() => document.getElementById('friendsBox').classList.remove('pulse'), 400);
+            
+            if (selectedCharacter.healing && health < 3) {
+                health++;
+                const hearts = '❤️'.repeat(health);
+                document.getElementById('health').textContent = hearts;
+            }
+            
+            if (friendsRescued >= friendsNeeded) {
+                completeLevel();
+            }
+        }
+        
+        function completeLevel() {
+            gameRunning = false;
+            document.getElementById('levelMessage').textContent = `¡${friendsNeeded} amigos rescatados del Nivel ${currentLevel}!`;
+            document.getElementById('levelScore').textContent = score;
+            document.getElementById('levelComplete').classList.add('show');
+        }
+        
+        function nextLevel() {
+            document.getElementById('levelComplete').classList.remove('show');
+            currentLevel++;
+            
+            if (currentLevel > 3) {
+                endGame(true);
+                return;
+            }
+            
+            document.getElementById('level').textContent = currentLevel;
+            friendsRescued = 0;
+            friendsNeeded = 3;
+            document.getElementById('friends').textContent = `0/${friendsNeeded}`;
+            
+            bullets.length = 0;
+            demons.length = 0;
+            friends.length = 0;
+            particles.length = 0;
+            
+            gameRunning = true;
+        }
+        
+        function endGame(victory) {
+            gameRunning = false;
+            
+            if (victory) {
+                document.getElementById('gameOverTitle').textContent = '🎉 ¡VICTORIA TOTAL! 🎉';
+                document.getElementById('gameOverMessage').textContent = '¡Todos los amigos han sido rescatados!';
+            } else {
+                document.getElementById('gameOverTitle').textContent = '💔 GAME OVER 💔';
+                document.getElementById('gameOverMessage').textContent = '¡Los demonios ganaron esta vez!';
+            }
+            
+            document.getElementById('finalScore').textContent = score;
+            document.getElementById('finalLevel').textContent = currentLevel;
+            document.getElementById('gameOver').classList.add('show');
+        }
+        
+        function restartGame() {
+            document.getElementById('gameOver').classList.remove('show');
+            currentLevel = 1;
+            score = 0;
+            health = 3;
+            friendsRescued = 0;
+            friendsNeeded = 3;
+            
+            document.getElementById('level').textContent = '1';
+            document.getElementById('score').textContent = '0';
+            document.getElementById('friends').textContent = '0/3';
+            document.getElementById('health').textContent = '❤️❤️❤️';
+            
+            bullets.length = 0;
+            demons.length = 0;
+            friends.length = 0;
+            particles.length = 0;
+            
+            player.y = canvas.height / 2;
+            
+            gameRunning = true;
+        }
+        
+        function update() {
+            if (!gameRunning) return;
+            
+            // Player movement
+            if (keys.ArrowUp || keys.KeyW) player.y -= player.speed;
+            if (keys.ArrowDown || keys.KeyS) player.y += player.speed;
+            if (keys.ArrowLeft || keys.KeyA) player.x -= player.speed;
+            if (keys.ArrowRight || keys.KeyD) player.x += player.speed;
+            
+            player.x = Math.max(0, Math.min(canvas.width - player.width, player.x));
+            player.y = Math.max(0, Math.min(canvas.height - player.height, player.y));
+            
+            // Bullets
+            for (let i = bullets.length - 1; i >= 0; i--) {
+                bullets[i].x += bullets[i].speed;
+                if (bullets[i].x > canvas.width) bullets.splice(i, 1);
+            }
+            
+            // Spawn demons
+            demonSpawnTimer++;
+            if (demonSpawnTimer > Math.max(80 - currentLevel * 10, 40)) {
+                spawnDemon();
+                demonSpawnTimer = 0;
+            }
+            
+            // Spawn friends
+            friendSpawnTimer++;
+            if (friendSpawnTimer > 150 && friends.length < friendsNeeded - friendsRescued) {
+                spawnFriend();
+                friendSpawnTimer = 0;
+            }
+            
+            // Update demons
+            for (let i = demons.length - 1; i >= 0; i--) {
+                demons[i].x -= demons[i].speed;
+                
+                // Check collision with player
+                if (checkCollision(player, demons[i])) {
+                    loseHealth();
+                    createParticles(demons[i].x, demons[i].y, demons[i].color, 30);
+                    demons.splice(i, 1);
+                    continue;
+                }
+                
+                // Check collision with bullets
+                for (let j = bullets.length - 1; j >= 0; j--) {
+                    if (checkCollision(bullets[j], demons[i])) {
+                        demons[i].health -= 1;
+                        bullets.splice(j, 1);
+                        
+                        if (demons[i].health <= 0) {
+                            updateScore(demons[i].points);
+                            createParticles(demons[i].x, demons[i].y, demons[i].color);
+                            demons.splice(i, 1);
+                        }
+                        break;
+                    }
+                }
+                
+                if (demons[i] && demons[i].x < -demons[i].width) {
+                    demons.splice(i, 1);
+                }
+            }
+            
+            // Update friends
+            for (let i = friends.length - 1; i >= 0; i--) {
+                friends[i].x -= friends[i].speed;
+                
+                if (checkCollision(player, friends[i])) {
+                    rescueFriend();
+                    updateScore(50);
+                    createParticles(friends[i].x, friends[i].y, '#ffff00');
+                    friends.splice(i, 1);
+                    continue;
+                }
+                
+                if (friends[i] && friends[i].x < -friends[i].width) {
+                    friends.splice(i, 1);
+                }
+            }
+            
+            // Update particles
+            for (let i = particles.length - 1; i >= 0; i--) {
+                particles[i].x += particles[i].dx;
+                particles[i].y += particles[i].dy;
+                particles[i].life -= 0.02;
+                
+                if (particles[i].life <= 0) particles.splice(i, 1);
+            }
+        }
+        
+        function draw() {
+            ctx.fillStyle = 'rgba(10, 10, 26, 0.3)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            drawParticles();
+            drawFriends();
+            drawDemons();
+            drawBullets();
+            drawPlayer();
+        }
+        
+        function gameLoop() {
+            if (gameRunning) {
+                update();
+                draw();
+                requestAnimationFrame(gameLoop);
+            }
+        }
+    </script>
+</body>
+</html>
